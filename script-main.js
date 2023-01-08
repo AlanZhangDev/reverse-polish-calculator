@@ -13,11 +13,26 @@ let nums = {
     zero: 0
 };
 
+let numOne = 0;
+let numTwo = 0;
+let calcSwitch = 0;
+
 function stackAdd(btn) {
     let btnClass = btn.getAttribute('class');
     let btnID = btn.getAttribute('id');
     if (btnClass === "number") {
-        stack.push(nums[btnID]);
+        if (calcSwitch === 0) {
+            numOne = numOne.toString() + nums[btnID];
+            console.log(numOne);
+            numOne = parseInt(numOne);
+            console.log(numOne);
+        } else {
+            numTwo = numTwo.toString() + nums[btnID];
+            console.log(numTwo);
+            numTwo = parseInt(numTwo);
+            console.log(numTwo);
+        }
+        screen.textContent = screen.textContent + nums[btnID];
     } else if (btnClass === "operator") {
         if (btnID === "add") {
             add();
@@ -29,36 +44,68 @@ function stackAdd(btn) {
             divide();
         }
     } else {
-
+        if (btnID === "equals") {
+            equals();
+        } else if (btnID === "clear") {
+            clear();
+        } else if (btnID === "enter") {
+            enter();
+        }
     }
 }
 
 function add() {
+    stack.push(numTwo);
     let a = stack.pop();
     let b = stack.pop();
     stack.push(a + b);
     console.log(stack[0]);
+    screen.textContent = stack[0] + " ";
+    numTwo = 0;
 }
 
 function subtract() {
+    stack.push(numTwo);
     let a = stack.pop();
     let b = stack.pop();
     stack.push(b - a);
     console.log(stack[0]);
+    screen.textContent = stack[0] + " ";
+    numTwo = 0;
 }
 
 function multiply() {
+    stack.push(numTwo);
     let a = stack.pop();
     let b = stack.pop();
     stack.push(a * b);
     console.log(stack[0]);
+    screen.textContent = stack[0] + " ";
+    numTwo = 0;
 }
 
 function divide() {
+    stack.push(numTwo);
     let a = stack.pop();
     let b = stack.pop();
-    stack.push(Math.floor(a / b));
+    stack.push(Math.floor(b / a));
     console.log(stack[0]);
+    screen.textContent = stack[0] + " ";
+    numTwo = 0;
+}
+
+function clear() {
+    stack = [];
+    calcSwitch = 0;
+    numOne = 0;
+    numTwo = 0;
+    screen.textContent = "";
+}
+
+function enter() {
+    stack.push(numOne);
+    screen.textContent = screen.textContent + " ";
+    calcSwitch === 0 ? calcSwitch = 1 : calcSwitch = 0;
 }
 
 const btns = document.querySelectorAll('button');
@@ -68,3 +115,5 @@ btns.forEach((btn) => {
         stackAdd(btn);
     });
 });
+
+const screen = document.querySelector("#screen");
